@@ -13,7 +13,7 @@ namespace Bedivere.FSM
         }
 
         // This method is called before the state is made the current state (see: OnExit())
-        public virtual void OnEnter(object customData) {}
+        public virtual void OnEnter(BFSMState previous, object customData) {}
 
         // This method is called before leaving the current State by the FSM
         public virtual void OnExit() {}

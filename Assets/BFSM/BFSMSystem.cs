@@ -41,7 +41,7 @@ namespace Bedivere.FSM
                 }
 
                 current = state;
-                current.OnEnter(customData);
+                current.OnEnter(previous, customData);
                 stack.Add(state);
 
                 #if UNITY_EDITOR
@@ -67,7 +67,7 @@ namespace Bedivere.FSM
                 }
 
                 current = state;
-                current.OnEnter(customData);
+                current.OnEnter(previous, customData);
                 stack.Add(state);
 
                 #if UNITY_EDITOR
@@ -94,7 +94,7 @@ namespace Bedivere.FSM
                 if (stack.Count > 0)
                 {
                     current = stack.Last();
-                    current.OnEnter(customData);
+                    current.OnEnter(previous, customData);
                 }
                 else
                 {
