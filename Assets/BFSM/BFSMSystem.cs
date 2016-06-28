@@ -15,7 +15,7 @@ namespace Bedivere.FSM
         {
             if (!registeredStates.Contains(state)) {
                 registeredStates.Add(state);
-                state.Initialize();
+                state.Initialize(this);
             }
             else {
                 Debug.LogErrorFormat("state {0} has been added previously", state);
