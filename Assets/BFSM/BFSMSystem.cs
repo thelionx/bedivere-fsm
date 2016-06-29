@@ -6,8 +6,8 @@ namespace Bedivere.FSM
 {
     public class BFSMSystem : MonoBehaviour
     {
+        public bool isLogged = true;
         [SerializeField] private List<BFSMState> registeredStates = new List<BFSMState>();
-
         [SerializeField] private BFSMState current;
         [SerializeField] private List<BFSMState> stack = new List<BFSMState>();
 
@@ -15,7 +15,7 @@ namespace Bedivere.FSM
         {
             if (!registeredStates.Contains(state)) {
                 registeredStates.Add(state);
-                state.Initialize(this);
+                state.Initialize();
             }
             else {
                 Debug.LogErrorFormat("state {0} has been added previously", state);
@@ -44,9 +44,8 @@ namespace Bedivere.FSM
                 current.OnEnter(previous, customData);
                 stack.Add(state);
 
-                #if UNITY_EDITOR
-                Debug.LogFormat("[Go to State] {0} -> {1}", previous, current);
-                #endif
+                if (isLogged)
+                    Debug.LogFormat("[Go to State] {0} -> {1}", previous, current);
 
             }
             else
@@ -70,9 +69,8 @@ namespace Bedivere.FSM
                 current.OnEnter(previous, customData);
                 stack.Add(state);
 
-                #if UNITY_EDITOR
-                Debug.LogFormat("[Push State] {0} -> {1}", previous, current);
-                #endif
+                if (isLogged)
+                    Debug.LogFormat("[Push State] {0} -> {1}", previous, current);
             }
             else
             {
@@ -101,14 +99,13 @@ namespace Bedivere.FSM
                     current = null;
                 }
 
-                #if UNITY_EDITOR
-                Debug.LogFormat("[Pop State] {0} -> {1}", previous, current);
-                #endif
+                if (isLogged)
+                    Debug.LogFormat("[Pop State] {0} -> {1}", previous, current);
 
             }
             else
             {
-                Debug.LogFormat("[Pop] there is no more state to pop.");
+                Debug.LogError("[Pop] there is no more state to pop.");
             }
         }
     }
