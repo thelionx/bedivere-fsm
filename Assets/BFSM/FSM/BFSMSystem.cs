@@ -7,11 +7,11 @@ namespace Bedivere.FSM
     public class BFSMSystem : MonoBehaviour
     {
         public bool isLogged = true;
-        [SerializeField] private List<BFSMState> registeredStates = new List<BFSMState>();
-        [SerializeField] private BFSMState current;
-        [SerializeField] private List<BFSMState> stack = new List<BFSMState>();
+        private List<IBFSMState> registeredStates = new List<IBFSMState>();
+        private IBFSMState current;
+        private List<IBFSMState> stack = new List<IBFSMState>();
 
-        public void RegisterState(BFSMState state)
+        public void RegisterState(IBFSMState state)
         {
             if (!registeredStates.Contains(state)) {
                 registeredStates.Add(state);
@@ -21,16 +21,16 @@ namespace Bedivere.FSM
             }
         }
 
-        public void UnregisterState(BFSMState state)
+        public void UnregisterState(IBFSMState state)
         {
             registeredStates.Remove(state);
         }
 
-        public void GoToState(BFSMState state, object customData = null)
+        public void GoToState(IBFSMState state, object customData = null)
         {
             if (registeredStates.Contains(state))
             {
-                BFSMState previous = null;
+                IBFSMState previous = null;
 
                 if (stack.Count > 0) {
                     previous = stack.Last();
@@ -53,11 +53,11 @@ namespace Bedivere.FSM
             }
         }
 
-        public void PushState(BFSMState state, object customData = null)
+        public void PushState(IBFSMState state, object customData = null)
         {
             if (registeredStates.Contains(state))
             {
-                BFSMState previous = null;
+                IBFSMState previous = null;
 
                 if (stack.Count > 0) {
                     previous = stack.Last();
@@ -79,7 +79,7 @@ namespace Bedivere.FSM
 
         public void PopState(object customData = null)
         {
-            BFSMState previous = null;
+            IBFSMState previous = null;
 
             if (stack.Count > 0)
             {
