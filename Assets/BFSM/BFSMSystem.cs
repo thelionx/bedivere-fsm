@@ -15,7 +15,6 @@ namespace Bedivere.FSM
         {
             if (!registeredStates.Contains(state)) {
                 registeredStates.Add(state);
-                state.Initialize();
             }
             else {
                 Debug.LogErrorFormat("state {0} has been added previously", state);
@@ -41,7 +40,7 @@ namespace Bedivere.FSM
                 }
 
                 current = state;
-                current.OnEnter(previous, customData);
+                current.OnEnter(previous, customData, TransitionCause.GoTo);
                 stack.Add(state);
 
                 if (isLogged)
@@ -66,7 +65,7 @@ namespace Bedivere.FSM
                 }
 
                 current = state;
-                current.OnEnter(previous, customData);
+                current.OnEnter(previous, customData, TransitionCause.Push);
                 stack.Add(state);
 
                 if (isLogged)
@@ -92,7 +91,7 @@ namespace Bedivere.FSM
                 if (stack.Count > 0)
                 {
                     current = stack.Last();
-                    current.OnEnter(previous, customData);
+                    current.OnEnter(previous, customData, TransitionCause.Pop);
                 }
                 else
                 {
@@ -108,6 +107,13 @@ namespace Bedivere.FSM
                 Debug.LogError("[Pop] there is no more state to pop.");
             }
         }
+    }
+
+    public enum TransitionCause
+    {
+        GoTo,
+        Push,
+        Pop
     }
 }
 
