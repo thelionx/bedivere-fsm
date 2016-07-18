@@ -11,6 +11,12 @@ namespace Bedivere.FSM
         private IBFSMState current;
         private List<IBFSMState> stack = new List<IBFSMState>();
 
+        #region events
+        public delegate void StateChangeDelegate(IBFSMState oldState, IBFSMState newState, TransitionCause cause);
+        public event StateChangeDelegate onStateChangeE;
+        public void OnStateChange(IBFSMState oldState, IBFSMState newState, TransitionCause cause) { if (onStateChangeE != null) onStateChangeE(oldState, newState, cause); }
+        #endregion
+
         public void RegisterState(IBFSMState state)
         {
             if (!registeredStates.Contains(state)) {
@@ -39,9 +45,13 @@ namespace Bedivere.FSM
                     stack.Remove(previous);
                 }
 
+                TransitionCause cause = TransitionCause.GoTo;
+
                 current = state;
-                current.OnEnter(previous, customData, TransitionCause.GoTo);
+                current.OnEnter(previous, customData, cause);
                 stack.Add(state);
+
+                OnStateChange(previous, current, cause);
 
                 if (isLogged)
                     Debug.LogFormat("[Go to State] {0} -> {1}", previous, current);
@@ -64,9 +74,13 @@ namespace Bedivere.FSM
                     previous.OnExit();
                 }
 
+                TransitionCause cause = TransitionCause.Push;
+
                 current = state;
-                current.OnEnter(previous, customData, TransitionCause.Push);
+                current.OnEnter(previous, customData, cause);
                 stack.Add(state);
+
+                OnStateChange(previous, current, cause);
 
                 if (isLogged)
                     Debug.LogFormat("[Push State] {0} -> {1}", previous, current);
@@ -90,8 +104,12 @@ namespace Bedivere.FSM
 
                 if (stack.Count > 0)
                 {
+                    TransitionCause cause = TransitionCause.Pop;
+
                     current = stack.Last();
-                    current.OnEnter(previous, customData, TransitionCause.Pop);
+                    current.OnEnter(previous, customData, cause);
+
+                    OnStateChange(previous, current, cause);
                 }
                 else
                 {
