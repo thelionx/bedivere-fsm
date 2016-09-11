@@ -7,9 +7,9 @@ namespace Bedivere.FSM
     public class BFSMSystem : MonoBehaviour
     {
         public bool isLogged = true;
+        public IBFSMState current;
+        public List<IBFSMState> stack = new List<IBFSMState>();
         private List<IBFSMState> registeredStates = new List<IBFSMState>();
-        private IBFSMState current;
-        private List<IBFSMState> stack = new List<IBFSMState>();
 
         #region events
         public delegate void StateChangeDelegate(IBFSMState oldState, IBFSMState newState, TransitionCause cause);
