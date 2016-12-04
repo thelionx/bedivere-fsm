@@ -11,7 +11,7 @@ namespace Bedivere.FSM.Examples
         {
         }
 
-        public void OnExit()
+        public void OnExit(TransitionCause cause)
         {
         }
     }

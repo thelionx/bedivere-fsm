@@ -36,16 +36,16 @@ namespace Bedivere.FSM
         {
             if (registeredStates.Contains(state))
             {
+                TransitionCause cause = TransitionCause.GoTo;
                 IBFSMState previous = null;
 
                 if (stack.Count > 0) {
                     previous = stack.Last();
 
-                    previous.OnExit();
+                    previous.OnExit(cause);
                     stack.Remove(previous);
                 }
 
-                TransitionCause cause = TransitionCause.GoTo;
 
                 current = state;
                 stack.Add(state);
@@ -68,14 +68,14 @@ namespace Bedivere.FSM
         {
             if (registeredStates.Contains(state))
             {
+                TransitionCause cause = TransitionCause.Push;
                 IBFSMState previous = null;
 
                 if (stack.Count > 0) {
                     previous = stack.Last();
-                    previous.OnExit();
+                    previous.OnExit(cause);
                 }
 
-                TransitionCause cause = TransitionCause.Push;
 
                 current = state;
                 stack.Add(state);
@@ -98,14 +98,15 @@ namespace Bedivere.FSM
 
             if (stack.Count > 0)
             {
+                TransitionCause cause = TransitionCause.Pop;
+
                 previous = stack.Last();
-                previous.OnExit();
+                previous.OnExit(cause);
 
                 stack.Remove(previous);
 
                 if (stack.Count > 0)
                 {
-                    TransitionCause cause = TransitionCause.Pop;
 
                     current = stack.Last();
                     current.OnEnter(previous, customData, cause);

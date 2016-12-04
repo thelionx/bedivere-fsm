@@ -8,6 +8,6 @@ namespace Bedivere.FSM
         void OnEnter(IBFSMState previous, object customData, TransitionCause cause);
 
         // This method is called before leaving the current State by the FSM
-        void OnExit();
+        void OnExit(TransitionCause cause);
     }
 }
