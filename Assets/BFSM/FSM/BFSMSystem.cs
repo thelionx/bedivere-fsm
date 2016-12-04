@@ -7,9 +7,9 @@ namespace Bedivere.FSM
     public class BFSMSystem : MonoBehaviour
     {
         public bool isLogged = true;
+        private List<IBFSMState> registeredStates = new List<IBFSMState>();
         public IBFSMState current;
         public List<IBFSMState> stack = new List<IBFSMState>();
-        private List<IBFSMState> registeredStates = new List<IBFSMState>();
 
         #region events
         public delegate void StateChangeDelegate(IBFSMState oldState, IBFSMState newState, TransitionCause cause);
@@ -48,10 +48,10 @@ namespace Bedivere.FSM
                 TransitionCause cause = TransitionCause.GoTo;
 
                 current = state;
-                current.OnEnter(previous, customData, cause);
                 stack.Add(state);
-
+                current.OnEnter(previous, customData, cause);
                 OnStateChange(previous, current, cause);
+
 
                 if (isLogged)
                     Debug.LogFormat("[Go to State] {0} -> {1}", previous, current);
@@ -61,6 +61,7 @@ namespace Bedivere.FSM
             {
                 Debug.LogErrorFormat("Cannot go to {0} because it hasn't been added to the list.", state);
             }
+
         }
 
         public void PushState(IBFSMState state, object customData = null)
@@ -77,10 +78,10 @@ namespace Bedivere.FSM
                 TransitionCause cause = TransitionCause.Push;
 
                 current = state;
-                current.OnEnter(previous, customData, cause);
                 stack.Add(state);
-
+                current.OnEnter(previous, customData, cause);
                 OnStateChange(previous, current, cause);
+
 
                 if (isLogged)
                     Debug.LogFormat("[Push State] {0} -> {1}", previous, current);
@@ -108,8 +109,8 @@ namespace Bedivere.FSM
 
                     current = stack.Last();
                     current.OnEnter(previous, customData, cause);
-
                     OnStateChange(previous, current, cause);
+
                 }
                 else
                 {
