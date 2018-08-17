@@ -46,16 +46,13 @@ namespace Bedivere.FSM
                     stack.Remove(previous);
                 }
 
-
                 current = state;
                 stack.Add(state);
                 current.OnEnter(previous, customData, cause);
                 OnStateChange(previous, current, cause);
 
-
                 if (isLogged)
                     Debug.LogFormat("[Go to State] {0} -> {1}", previous, current);
-
             }
             else
             {
@@ -76,12 +73,10 @@ namespace Bedivere.FSM
                     previous.OnExit(cause);
                 }
 
-
                 current = state;
                 stack.Add(state);
                 current.OnEnter(previous, customData, cause);
                 OnStateChange(previous, current, cause);
-
 
                 if (isLogged)
                     Debug.LogFormat("[Push State] {0} -> {1}", previous, current);
@@ -107,11 +102,9 @@ namespace Bedivere.FSM
 
                 if (stack.Count > 0)
                 {
-
                     current = stack.Last();
                     current.OnEnter(previous, customData, cause);
                     OnStateChange(previous, current, cause);
-
                 }
                 else
                 {
@@ -120,12 +113,16 @@ namespace Bedivere.FSM
 
                 if (isLogged)
                     Debug.LogFormat("[Pop State] {0} -> {1}", previous, current);
-
             }
             else
             {
                 Debug.LogError("[Pop] there is no more state to pop.");
             }
+        }
+
+        void Update()
+        {
+            if (current != null) current.OnUpdate();
         }
     }
 

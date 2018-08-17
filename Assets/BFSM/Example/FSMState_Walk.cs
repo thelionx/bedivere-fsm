@@ -9,10 +9,17 @@ namespace Bedivere.FSM.Examples
         public FSMManager fsm;
         public void OnEnter(IBFSMState previous, object customData, TransitionCause cause)
         {
+            Debug.Log("Enter - Walk");
+        }
+
+        public void OnUpdate()
+        {
+            Debug.Log("Update - Walk");
         }
 
         public void OnExit(TransitionCause cause)
         {
+            Debug.Log("Exit - Walk");
         }
     }
 }
